@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>  //xin chào mọi người
 #include <string>
 #include <vector>
 #include <fstream>  	// Thư viện để đọc và ghi file
