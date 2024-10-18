@@ -1,4 +1,4 @@
-#include <iostream>  //xin chào mọi người
+#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>  	// Thư viện để đọc và ghi file
@@ -114,7 +114,7 @@ void InsertStart(LinkedList &H, const Book &b) // const đảm bảo sách khôn
     
     /*         Ví dụ: H --> [Node1] --> [Node2] --> NULL (lúc đầu)
 	                  H --> [Q (Node mới)] --> [Node1] --> [Node2] --> NULL(lúc sau)           */
-    
+  
 }
 
 // Hàm thêm sách vào cuối kệ sách
@@ -236,51 +236,7 @@ void AutoSort(LinkedList &H) {
     ExchangeSort(H);
 }
 
-// Hàm tìm kiếm sách sử dụng thuật toán KMP 
-void initNext(const string &pattern, vector<int> &next) {
-    int m = pattern.size();
-    next[0] = 0;
-    int len = 0;
-    int i = 1;
-    while (i < m) {
-        if (pattern[i] == pattern[len]) {
-            len++;
-            next[i] = len;
-            i++;
-        } else {
-            if (len != 0) {
-                len = next[len - 1];
-            } else {
-                next[i] = 0;
-                i++;
-            }
-        }
-    }
-}
 
-int KMPSearch(const string &text, const string &pattern) {
-    int n = text.size();
-    int m = pattern.size();
-    vector<in`````` bvbt> next(m);
-    initNext(pattern, next);
-
-    int i = 0, j = 0;
-    while (i < n) {
-        if (pattern[j] == text[i]) {
-            i++;
-            j++;
-        }
-        if (j == m) {
-            return i - j;
-            j = next[j - 1];
-        } else if (i < n && pattern[j] != text[i]) {
-            if (j != 0) j = next[j - 1];
-            else i++;
-        }
-    }
-    return -1;
-}
-// đến đây
 
 
 
@@ -297,7 +253,7 @@ int Sumofbook (LinkedList & H)
     return count;
 }
 
-// hàm xóa một cuốn sách bất kỳ ra khỏi danh sách
+// hàm xóa một cuốn sách bất kỳ ra khỏi danh sách theo tên
 void Deletebook(LinkedList &H, const string &title) {
     PNode P = H, prev = NULL;
     while (P != NULL) {
@@ -434,6 +390,9 @@ void buybook(LinkedList &H) {
         if (!found) {// nếu while ko tìm đc cuốn nào thì found vẫn bằng false
             cout << "[Khong tim thay sach voi ma: " << ms << "]" << endl;
         }
+        else {
+        	cout << "ok";
+		}
         
     } while (ms != 0);
     
@@ -515,7 +474,16 @@ void Searchmin (LinkedList & H){
 	cout << "Gia: " << Minbook -> info.costb << " VND" << endl;
 }
 
-
+PNode SearchBytitle(LinkedList H, const string &Name) {
+    PNode P = H;
+    while (P != NULL) {
+        if (P->info.title == Name) {
+            return P; // Tìm thấy sách 
+        }
+        P = P->next; // Tiếp tục duyệt các phần tử trong danh sách
+    }
+    return NULL; // Không tìm thấy sách 
+}
 
 // Menu cho các chức năng
 void Menu(LinkedList &H) {
@@ -600,17 +568,18 @@ void Menu(LinkedList &H) {
                 AutoSort(H);
                 cout << "\n[Sach đa duoc sap xep theo thu tu chu cai.]\n";
                 break;
-            case 8:
-				ShowList (H);
-                cout << "\n> Nhap tieu de sach can tim: ";
+            case 8: {
+                cout << "Nhap ten sach can tim: ";
                 cin.ignore();
-                index = KMPSearch(title1, title1); // 
-                if (index != -1) {
-                    cout << "\n[Sach co tieu de '" << title1 << "' dã duoc tim thay!]\n";
+                getline(cin, title1);
+                PNode result = SearchBytitle(H, title1);
+                if (result != NULL) {
+                    ShowBook(result->info);
                 } else {
-                    cout << "\n[Khong tim thay sach voi tieu de '" << title1 << "'.]\n";
+                    cout << "Khong tim thay cuon sach nao voi ten: " << title1 << endl;
                 }
                 break;
+            }
             case 9:
                 Sumofbook(H);// gọi hàm tính tổng
                 break;
