@@ -66,20 +66,73 @@ void displayQueue(NodePointer head) {
     cout << endl;
 }
 
+// Hàm truy vấn phần tử có độ ưu tiên cao nhất (peek)
+void peek(NodePointer head) {
+    if (isEmpty(head)) {
+        cout << "Queue is empty, no element to peek." << endl;
+        return;
+    }
+    cout << "Top element: (" << head->data << ", " << head->priority << ")" << endl;
+}
+
+// Hàm cập nhật độ ưu tiên của một phần tử
+void updatePriority(NodePointer& head, int data, int newPriority) {
+    if (isEmpty(head)) {
+        cout << "Queue is empty, cannot update priority." << endl;
+        return;
+    }
+
+    // Tìm và xóa node có giá trị `data`
+    NodePointer temp = head, prev = nullptr;
+    while (temp != nullptr && temp->data != data) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == nullptr) {
+        cout << "Element with data " << data << " not found." << endl;
+        return;
+    }
+
+    // Xóa node tìm thấy
+    if (prev == nullptr) {
+        head = head->next;
+    } else {
+        prev->next = temp->next;
+    }
+    delete temp;
+
+    // Chèn lại node với độ ưu tiên mới
+    enqueue(head, data, newPriority);
+}
+
 int main() {
     NodePointer priorityQueue;
     createQueue(priorityQueue);
 
+    // Thêm phần tử vào hàng đợi
     enqueue(priorityQueue, 9, 2);
     enqueue(priorityQueue, 5, 1);
     enqueue(priorityQueue, 15, 3);
-    enqueue(priorityQueue, 7, 2);  // Cùng độ ưu tiên với (9, 2) và được chèn trước
+    enqueue(priorityQueue, 7, 2);
+    cout << "Initial queue: ";
     displayQueue(priorityQueue);
 
-    dequeue(priorityQueue);
+    // Truy vấn phần tử có độ ưu tiên cao nhất
+    peek(priorityQueue);
+
+    // Cập nhật độ ưu tiên
+    cout << "Updating priority of element 9 to 4." << endl;
+    updatePriority(priorityQueue, 9, 4);
     displayQueue(priorityQueue);
 
+    // Xóa phần tử
     dequeue(priorityQueue);
+    cout << "After dequeue: ";
     displayQueue(priorityQueue);
+
+    // Truy vấn sau khi xóa
+    peek(priorityQueue);
+
     return 0;
 }
